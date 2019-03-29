@@ -2,13 +2,15 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <RootNamespace>dotnet_quick_start</RootNamespace>
   </PropertyGroup>
    <ItemGroup>
-    <ProjectReference Include="../../azure_batch_utils/azure_batch_utils.csproj" />
+    <ProjectReference Include="../../../azure_batch_utils/azure_batch_utils.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Batch" Version="*"/>
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.3"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.0" />
   </ItemGroup>
 </Project>

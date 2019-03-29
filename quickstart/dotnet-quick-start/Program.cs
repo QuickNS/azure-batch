@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Batch;
+﻿using azure_batch_utils;
+using Microsoft.Azure.Batch;
 using Microsoft.Azure.Batch.Auth;
 using Microsoft.Azure.Batch.Common;
 using Microsoft.WindowsAzure.Storage;
@@ -16,36 +17,16 @@ namespace dotnet_quick_start
         // Update the Batch and Storage account credential strings below with the values unique to your accounts.
         // These are used when constructing connection strings for the Batch and Storage client objects.
 
-        
-        // Batch account credentials
-        private const string BatchAccountName = "nunos";
-        private const string BatchAccountKey = "WLFUXN0QNLKHK0wlqrPJ11/2fUK6iWhaLS52bQruFn6aEN9LNDzN7XVgp8/QChW+anu2w+vWKOi2glYCkwEKcQ==";
-        private const string BatchAccountUrl = "https://nunos.westeurope.batch.azure.com";
-
-        // Storage account credentials
-        private const string StorageAccountName = "nunosbatchstorage";
-        private const string StorageAccountKey = "xKZevIXNZnSmfVIsVGQ2hMOfMS4D9f+bJGknsUQ+epgQy3tJxv9YEs8RGlS7aGRNIusY1oCEFyStIFpMz+esXg==";
-
         // Batch resource settings
         private const string PoolId = "DotNetQuickstartPool";
         private const string JobId = "DotNetQuickstartJob";
         private const int PoolNodeCount = 2;
-        private const string PoolVMSize = "STANDARD_A1_v2";
-        
-
+        private const string PoolVMSize = "STANDARD_A1_V2";
 
         static void Main(string[] args)
         {
-
-            if (String.IsNullOrEmpty(BatchAccountName) || 
-                String.IsNullOrEmpty(BatchAccountKey) ||
-                String.IsNullOrEmpty(BatchAccountUrl) ||
-                String.IsNullOrEmpty(StorageAccountName) ||
-                String.IsNullOrEmpty(StorageAccountKey))
-            {
-                throw new InvalidOperationException("One or more account credential strings have not been populated. Please ensure that your Batch and Storage account credentials have been specified.");
-            }
-
+            var settings = Config.LoadAccountSettings();
+           
             try
             {
 
@@ -55,7 +36,7 @@ namespace dotnet_quick_start
                 timer.Start();
 
                 // Create the blob client, for use in obtaining references to blob storage containers
-                CloudBlobClient blobClient = CreateCloudBlobClient(StorageAccountName, StorageAccountKey);
+                CloudBlobClient blobClient = CreateCloudBlobClient(settings.StorageAccountName, settings.StorageAccountKey);
 
                 // Use the blob client to create the input container in Azure Storage 
                 const string inputContainerName = "input-dotnet";
@@ -83,7 +64,7 @@ namespace dotnet_quick_start
 
                 // Get a Batch client using account creds
 
-                BatchSharedKeyCredentials cred = new BatchSharedKeyCredentials(BatchAccountUrl, BatchAccountName, BatchAccountKey);
+                BatchSharedKeyCredentials cred = new BatchSharedKeyCredentials(settings.BatchServiceUrl, settings.BatchAccountName, settings.BatchAccountKey);
 
                 using (BatchClient batchClient = BatchClient.Open(cred))
                 {
@@ -135,7 +116,7 @@ namespace dotnet_quick_start
                         string taskCommandLine = String.Format("cmd /c type {0}", inputFilename);
 
                         CloudTask task = new CloudTask(taskId, taskCommandLine);
-                        
+
                         task.ResourceFiles = new List<ResourceFile> { inputFiles[i] };
                         tasks.Add(task);
                     }
@@ -198,7 +179,7 @@ namespace dotnet_quick_start
                 Console.WriteLine("Sample complete, hit ENTER to exit...");
                 Console.ReadLine();
             }
-            
+
         }
 
         private static void CreateBatchPool(BatchClient batchClient, VirtualMachineConfiguration vmConfiguration)
@@ -295,7 +276,7 @@ namespace dotnet_quick_start
             string sasBlobToken = blobData.GetSharedAccessSignature(sasConstraints);
             string blobSasUri = String.Format("{0}{1}", blobData.Uri, sasBlobToken);
 
-            return ResourceFile.FromUrl(blobSasUri,blobName);
+            return ResourceFile.FromUrl(blobSasUri, blobName);
         }
 
 

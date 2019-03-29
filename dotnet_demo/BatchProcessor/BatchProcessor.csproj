@@ -4,9 +4,13 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
   </PropertyGroup>
+   <ItemGroup>
+    <ProjectReference Include="../../azure_batch_utils/azure_batch_utils.csproj" />
+  </ItemGroup>
+
   <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="*"/>
     <PackageReference Include="Microsoft.Azure.Batch" Version="*"/>
+    <PackageReference Include="WindowsAzure.Storage" Version="9.3.3"/>
      <Folder Include="input_data" CopyToOutputDirectory="Always" />
   </ItemGroup>
 </Project>

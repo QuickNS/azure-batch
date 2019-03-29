@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using azure_batch_utils;
 using Microsoft.Azure.Batch;
 using Microsoft.Azure.Batch.Auth;
 using Microsoft.Azure.Batch.Common;
@@ -10,15 +11,6 @@ using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace BatchProcessor {
     class Program {
-
-        // Batch account credentials
-        private const string BatchAccountName = "nunos";
-        private const string BatchAccountKey = "WLFUXN0QNLKHK0wlqrPJ11/2fUK6iWhaLS52bQruFn6aEN9LNDzN7XVgp8/QChW+anu2w+vWKOi2glYCkwEKcQ==";
-        private const string BatchAccountUrl = "https://nunos.westeurope.batch.azure.com";
-
-        // Storage account credentials
-        private const string StorageAccountName = "nunosbatchstorage";
-        private const string StorageAccountKey = "xKZevIXNZnSmfVIsVGQ2hMOfMS4D9f+bJGknsUQ+epgQy3tJxv9YEs8RGlS7aGRNIusY1oCEFyStIFpMz+esXg==";
 
         // Batch resource settings
         private const string PoolIdPrefix = "demopool";
@@ -59,8 +51,10 @@ namespace BatchProcessor {
             var poolId = PoolIdPrefix; // + DateTime.Now.ToString("yyyyMMdd_HHmmss");
             var jobId = JobIdPrefix; // + DateTime.Now.ToString("yyyyMMdd_HHmmss");
 
+            var settings = Config.LoadAccountSettings();
+
             // create a storage blob client to upload files
-            var blobClient = CreateBlobClient(StorageAccountName, StorageAccountKey);
+            var blobClient = CreateBlobClient(settings.StorageAccountName, settings.StorageAccountKey);
 
             Console.WriteLine("\n>>> Creating Storage Containers <<<\n");
 
@@ -84,7 +78,7 @@ namespace BatchProcessor {
             PromptContinue();
 
             // up until here, we haven't used the Batch API at all (except for ResourceFile type)
-            BatchSharedKeyCredentials cred = new BatchSharedKeyCredentials(BatchAccountUrl, BatchAccountName, BatchAccountKey);
+            BatchSharedKeyCredentials cred = new BatchSharedKeyCredentials(settings.BatchServiceUrl, settings.BatchAccountName, settings.BatchAccountKey);
 
             using(var batchClient = BatchClient.Open(cred)) {
                 

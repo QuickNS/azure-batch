@@ -1,0 +1,7 @@
+bin
+file_handling.csproj
+obj
+output.txt
+Program.cs
+resource_files
+Debug

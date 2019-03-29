@@ -1,0 +1,7 @@
+{
+    "batchServiceUrl" : "",
+    "batchAccountName" : "",
+    "batchAccountKey": "",
+    "storageAccountName" : "",
+    "storageAccountKey" : ""
+}

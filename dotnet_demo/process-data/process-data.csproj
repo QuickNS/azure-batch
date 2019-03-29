@@ -5,7 +5,4 @@
     <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
     <RootNamespace>process_data</RootNamespace>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="*"/>
-  </ItemGroup>
 </Project>
