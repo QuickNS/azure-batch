@@ -25,28 +25,37 @@ namespace process_data
             Console.WriteLine($"OutputFile is {outputFile}");
 
             Console.WriteLine($"\nCalculating results...\n");
-            var i = 0;
+            
             var values = new List<double>();
+            var indexes = new List<int>();
+
             using (var reader = File.OpenText(filename))
             {
                 while(!reader.EndOfStream)
                 {
-                    Console.WriteLine($"Processing line {i}");
                     var line = reader.ReadLine();
+                    var line_data = line.Split(',');
+
+                    var index = line_data.First();
+                    var value = line_data.Last();
+                    Console.Write($"Processing line {index}...");
                     Task.Delay(delay).GetAwaiter().GetResult();
-                    var value = line.Split(',').Last();
                     Console.WriteLine($"Result: {value}");
-                    i++;
                     values.Add(Double.Parse(value));
+                    indexes.Add(Int32.Parse(index));
                 }
             }
 
             Console.WriteLine($"Saving results...");
-
-            // TO DO: WRITE FILE OUTPUT AND CHANGE BATCH PROCESSOR TO USE OUTPUTFILES
-
-            //UploadContentToContainerAsync(outputFile, $"Aggregate result: {values.Average()}", outputContainer).GetAwaiter().GetResult();
-
+            using (StreamWriter sw = new StreamWriter(outputFile, append: false))
+            {
+                var avg = values.Average();
+                sw.WriteLine($"Aggregate result: {avg}\n");
+                for(int i=0;i<values.Count;i++)
+                {
+                    sw.WriteLine($"Index {indexes[i]}: {values[i]}, {values[i]-avg}");
+                }
+            }
             Console.WriteLine($"\nData processing finished!");
         }
     }
