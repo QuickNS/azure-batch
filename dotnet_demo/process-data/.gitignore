@@ -2,3 +2,4 @@ standalone
 publish
 *.zip
 *.tar
+*.tar.gz
