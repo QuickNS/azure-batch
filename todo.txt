@@ -1,0 +1,18 @@
+Demo flow 1:
+1 - Application Package submit through portal (standalone) :
+PromptAndQuery (show app package on portal)
+1.5 - App Lists Applications in the batch account
+2 - Create pool with application package
+PromptAndQuery - connect to node and show application installed
+3 - Create small test job on explorer
+4 - Run simple task to execute app package ($AZ_BATCH_APP_PACKAGE_process_data_1) - show output on stderr
+5 - Progress with application
+6 - OutputFiles
+
+
+
+Demo flow 2:
+1 - Upload small app package to storage
+2 - Run Start Task to install dotnet core
+3 - Run Job Preparation task to download and untar app package
+4 - Run tasks with dotnet run process-data.dll 
