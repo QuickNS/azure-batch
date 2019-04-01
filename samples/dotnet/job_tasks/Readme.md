@@ -9,6 +9,4 @@ This sample shows how to configure job preparation and release tasks.
 
 ### Setup
 
-Fill in the settings in *settings.json* file and rename it to *accountsettings.json*.
-
-The BatchConfig.LoadAccountSettings looks for a file named **accountsettings.json** to retrieve the configuration.
+Fill in the settings in *settings.json* file
